@@ -157,4 +157,4 @@ function tokenize(input: string): Tokens {
     return tokens;
 }
 
-export { Types, tokenize };
+export { Types, tokenize, Tokens };

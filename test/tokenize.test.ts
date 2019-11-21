@@ -115,6 +115,7 @@ it('should tokenize @each with code inside', () => {
             </div>
         {/each}
     `;
+
     expect(tokenize(code)).toEqual([
         { type: Types.openCurl, value: '{' },
         { type: Types.At, value: '@' },
