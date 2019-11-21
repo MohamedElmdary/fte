@@ -1,0 +1,21 @@
+{
+    "name": "fte",
+    "version": "1.0.0",
+    "description": "fte (fast template engine) is a template engine built with javascript",
+    "scripts": {
+        "test": "jest",
+        "build": "tsc"
+    },
+    "main": "index.js",
+    "repository": "https://github.com/MohamedElmdary/fte",
+    "author": "MohamedElmdary<engm5081@gmail.com>",
+    "license": "MIT",
+    "private": false,
+    "devDependencies": {
+        "@types/jest": "^24.0.23",
+        "@types/node": "^12.12.11",
+        "jest": "^24.9.0",
+        "ts-jest": "^24.1.0",
+        "typescript": "^3.7.2"
+    }
+}
