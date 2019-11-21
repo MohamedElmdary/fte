@@ -13,6 +13,7 @@ const isOpenCurl = (c: string) => c === '{';
 const isCloseCurl = (c: string) => c === '}';
 const isAt = (c: string) => c === '@';
 const isEqualOperator = (c: string) => c === '=';
+const isColon = (c: string) => c === ':';
 
 export {
     isChar,
@@ -28,5 +29,6 @@ export {
     isOpenCurl,
     isCloseCurl,
     isAt,
-    isEqualOperator
+    isEqualOperator,
+    isColon
 };

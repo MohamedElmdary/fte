@@ -12,7 +12,8 @@ import {
     isOpenCurl,
     isCloseCurl,
     isAt,
-    isEqualOperator
+    isEqualOperator,
+    isColon
 } from '../src/utils';
 
 it('should be true if char', () => {
@@ -90,4 +91,9 @@ it('should be true if @', () => {
 it('should be true if =', () => {
     expect(isEqualOperator('=')).toBe(true);
     expect(isEqualOperator('7')).toBe(false);
+});
+
+it('should be true if :', () => {
+    expect(isColon(':')).toBe(true);
+    expect(isColon('8')).toBe(false);
 });
