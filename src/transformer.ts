@@ -12,6 +12,7 @@ function traverseNode(node: any, visitor: Visitor) {
             visit.enter(node);
         }
     }
+
     if (node.body) {
         transform(node.body, visitor);
     }
