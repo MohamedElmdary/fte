@@ -1,17 +1,17 @@
 /* helpers for lexical analysis */
-const isChar = (c: string) => {};
-const isDigit = (c: string) => {};
-const isCharOrDigit = (c: string) => {};
-const isOpenAngel = (c: string) => {};
-const isCloseAngel = (c: string) => {};
-const isWhiteSpace = (c: string) => {};
-const isExclamation = (c: string) => {};
-const isDash = (c: string) => {};
-const isQuote = (c: string) => {};
-const isBackSlash = (c: string) => {};
-const isOpenCurl = (c: string) => {};
-const isCloseCurl = (c: string) => {};
-const isAt = (c: string) => {};
+const isChar = (c: string) => /[a-zA-Z]/.test(c);
+const isDigit = (c: string) => /\d/.test(c);
+const isCharOrDigit = (c: string) => isChar(c) || isDigit(c);
+const isOpenAngel = (c: string) => c === '<';
+const isCloseAngel = (c: string) => c === '>';
+const isWhiteSpace = (c: string) => /(\s|\t|\n)/.test(c);
+const isExclamation = (c: string) => c === '!';
+const isDash = (c: string) => c === '-';
+const isQuote = (c: string) => c === "'" || c === '"';
+const isBackSlash = (c: string) => c === '/';
+const isOpenCurl = (c: string) => c === '{';
+const isCloseCurl = (c: string) => c === '}';
+const isAt = (c: string) => c === '@';
 
 export {
     isChar,
