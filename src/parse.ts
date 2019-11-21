@@ -1,4 +1,5 @@
 import { Tokens, Types } from './tokenize';
+import { WSAEHOSTDOWN } from 'constants';
 
 enum ParseTypes {
     OpenTag = 'OpenTag',
@@ -57,8 +58,6 @@ function parenthesize(tokens: Tokens): Tokens[] {
         result.push(parts);
         continue;
     }
-
-    console.log(result);
 
     return result;
 }
@@ -183,70 +182,97 @@ function grouper(tokens: Tokens[]) {
     return result;
 }
 
+function isFlatGroup(group: any): boolean {
+    return (
+        group.type === ParseTypes.IdentifierExpression ||
+        group.type === ParseTypes.StringLiteral ||
+        group.type === ParseTypes.SelfClosingTag
+    );
+}
+
+function parseTag(group: any, groups: any[]) {
+    const sht = () => groups.shift();
+    const tag: any = {
+        ...group,
+        body: []
+    };
+    const body = [];
+
+    while ((group = sht()).type !== ParseTypes.CloseTag) {
+        if (group.type === ParseTypes.Expression) {
+            body.push(parseExpression(group, groups));
+            continue;
+        }
+
+        if (group.type === ParseTypes.OpenTag) {
+            body.push(parseTag(group, groups));
+            continue;
+        }
+
+        if (isFlatGroup(group)) {
+            body.push(group);
+            continue;
+        }
+    }
+    tag.body = body;
+    return tag;
+}
+
+function parseExpression(group: any, groups: any[]) {
+    const sht = () => groups.shift();
+    const expression: any = {
+        ...group,
+        body: []
+    };
+    const body = [];
+
+    while ((group = sht()).type !== ParseTypes.CloseExpression) {
+        if (group.type === ParseTypes.Expression) {
+            body.push(parseExpression(group, groups));
+            continue;
+        }
+
+        if (group.type === ParseTypes.OpenTag) {
+            body.push(parseTag(group, groups));
+            continue;
+        }
+
+        if (isFlatGroup(group)) {
+            body.push(group);
+            continue;
+        }
+    }
+
+    expression.body = body;
+    return expression;
+}
+
 function parser(groups: any[]) {
-    return groups;
+    const sht = () => groups.shift();
+    const result: any[] = [];
+
+    while (groups.length) {
+        let group = sht() as { type: ParseTypes; [key: string]: string };
+
+        if (group.type === ParseTypes.Expression) {
+            result.push(parseExpression(group, groups));
+            continue;
+        }
+
+        if (group.type === ParseTypes.OpenTag) {
+            result.push(parseTag(group, groups));
+            continue;
+        }
+
+        if (isFlatGroup(group)) {
+            result.push(group);
+            continue;
+        }
+    }
+
+    return result;
 }
 
 const parse = (tokens: Tokens) => parser(grouper(parenthesize(tokens)));
 
 export { ParseTypes, parse };
-
-/* 
-
-const sht = () => groups.shift() as { type: string; [key: string]: any };
-    let group = sht();
-    const result: any[] = [];
-
-    while (groups.length) {
-        if (group.type === ParseTypes.Expression) {
-            const expression: any = {
-                type: ParseTypes.Expression,
-                kind: group.kind,
-                environment: group.environment,
-                identifier: group.identifier,
-                indexIdentifier: group.indexIdentifier,
-                body: []
-            };
-            const body = [];
-            while ((group = sht()).type !== ParseTypes.CloseExpression) {
-                if (
-                    group.type === ParseTypes.OpenTag ||
-                    group.type === ParseTypes.Expression
-                ) {
-                    groups.unshift(group);
-                    body.push(parser(groups));
-                } else {
-                    body.push(group);
-                }
-            }
-            expression.body = body;
-
-            result.push(result);
-        }
-
-        if (group.type === ParseTypes.OpenTag) {
-            const tag: any = {
-                type: group.type,
-                value: group.value,
-                attributes: group.attributes,
-                body: []
-            };
-            const body = [];
-
-            while ((group = sht()).type !== ParseTypes.CloseTag) {
-                if (
-                    group.type === ParseTypes.OpenTag ||
-                    group.type === ParseTypes.Expression
-                ) {
-                    groups.unshift(group);
-                    body.push(parser(groups));
-                } else {
-                    body.push(group);
-                }
-            }
-            tag.body = body;
-            result.push(result);
-        }
-    }
-
-*/
