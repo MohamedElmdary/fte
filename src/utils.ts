@@ -12,6 +12,7 @@ const isBackSlash = (c: string) => c === '/';
 const isOpenCurl = (c: string) => c === '{';
 const isCloseCurl = (c: string) => c === '}';
 const isAt = (c: string) => c === '@';
+const isEqualOperator = (c: string) => c === '=';
 
 export {
     isChar,
@@ -26,5 +27,6 @@ export {
     isBackSlash,
     isOpenCurl,
     isCloseCurl,
-    isAt
+    isAt,
+    isEqualOperator
 };

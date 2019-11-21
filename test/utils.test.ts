@@ -11,7 +11,8 @@ import {
     isBackSlash,
     isOpenCurl,
     isCloseCurl,
-    isAt
+    isAt,
+    isEqualOperator
 } from '../src/utils';
 
 it('should be true if char', () => {
@@ -84,4 +85,9 @@ it('should be true if }', () => {
 it('should be true if @', () => {
     expect(isAt('@')).toBe(true);
     expect(isAt('7')).toBe(false);
+});
+
+it('should be true if =', () => {
+    expect(isEqualOperator('=')).toBe(true);
+    expect(isEqualOperator('7')).toBe(false);
 });
